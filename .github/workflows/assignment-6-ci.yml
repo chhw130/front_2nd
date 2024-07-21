@@ -23,7 +23,6 @@ jobs:
 
       - name: tsc && build
         run: pnpm run build
-        continue-on-error: true
         id: build
 
       - name: Comment PR
