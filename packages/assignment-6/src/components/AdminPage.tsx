@@ -36,8 +36,6 @@ export const AdminPage = ({
     discounts: [],
   });
 
-  console.log(1);
-
   const toggleProductAccordion = (productId: string) => {
     setOpenProductIds((prev) => {
       const newSet = new Set(prev);
