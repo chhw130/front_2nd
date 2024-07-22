@@ -127,7 +127,7 @@ jobs:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
 
       - name: Format lighthouse score
-        id: forma
+        id: format_lighthouse
         uses: actions/github-script@v6.4.0
         env:
           WORKING_DIRECTORY: ${{ env.working-directory }}
