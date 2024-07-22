@@ -26,7 +26,12 @@ jobs:
 
       - name: tsc && build
         id: build
-        run: pnpm -F assignment-6 build 2>&1 | tee error.log
+        continue-on-error: true
+        run: |
+          pnpm -F assignment-6 build 2>&1 | tee error.log
+          if [ ${PIPESTATUS[0]} -ne 0 ]; then
+            echo "build_failed=true" >> $GITHUB_OUTPUT
+          fi
 
       - name: Comment PR
         if: failure()
