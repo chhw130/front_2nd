@@ -136,7 +136,7 @@ jobs:
           script: |
             const fs = require('fs');
             const path = require('path');
-            const resultsPath = path.join(process.env.GITHUB_WORKSPACE, 'lhci_reports', 'manifest.json');
+            const resultsPath = path.join(process.env.GITHUB_WORKSPACE, 'packages', 'assignment-6', 'lhci_reports', 'manifest.json');
 
             if (!fs.existsSync(resultsPath)) {
               console.log(`File not found: ${resultsPath}`);
@@ -196,13 +196,6 @@ jobs:
             } else {
               console.log("No PR COMMENT!");
             }
-
-      - name: comment PR
-        uses: unsplash/comment-on-pr@v1.3.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN_FOR_CI }}
-        with:
-          msg: ${{ steps.format_lighthouse_score.outputs.comments}}
 
   assign_reviewer:
     runs-on: ubuntu-latest
