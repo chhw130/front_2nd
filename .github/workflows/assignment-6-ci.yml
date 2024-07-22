@@ -136,7 +136,7 @@ jobs:
           script: |
             const fs = require('fs');
             const path = require('path');
-            const resultsPath = path.join(process.env.WORKING_DIRECTORY, 'lhci_reports', 'manifest.json');
+            const resultsPath = path.join(process.env.GITHUB_WORKSPACE, 'lhci_reports', 'manifest.json');
 
             if (!fs.existsSync(resultsPath)) {
               console.log(`File not found: ${resultsPath}`);
