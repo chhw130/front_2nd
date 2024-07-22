@@ -126,6 +126,14 @@ jobs:
         env:
           LHCI_GITHUB_APP_TOKEN: ${{secrets.TOKEN_FOR_CI}}
 
+      - name: Make Report
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{secrets.TOKEN_FOR_CI}}
+        run: |
+          lhci collect --additive
+          lhci upload --target=filesystem --outputDir=./lighthouse-reports
+          lhci upload --target=temporary-public-storage
+
       - name: Format lighthouse score
         id: format_lighthouse_score
         uses: actions/github-script@v3
