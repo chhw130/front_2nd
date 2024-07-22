@@ -129,7 +129,6 @@ jobs:
       - name: Format lighthouse score
         id: format_lighthouse
         uses: actions/github-script@v6.4.0
-
         with:
           github-token: ${{secrets.TOKEN_FOR_CI}}
           script: |
