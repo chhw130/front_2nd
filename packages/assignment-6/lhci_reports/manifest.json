@@ -2,8 +2,8 @@
   {
     "url": "http://localhost:5173/",
     "isRepresentativeRun": false,
-    "htmlPath": "/Users/choehyeon-u/Desktop/react-deep/packages/assignment-6/lhci_reports/_-2024_07_22_13_03_14-report.html",
-    "jsonPath": "/Users/choehyeon-u/Desktop/react-deep/packages/assignment-6/lhci_reports/_-2024_07_22_13_03_14-report.json",
+    "htmlPath": "/Users/hyunwoo/Desktop/react-deep/packages/assignment-6/lhci_reports/_-2024_07_23_10_23_54-report.html",
+    "jsonPath": "/Users/hyunwoo/Desktop/react-deep/packages/assignment-6/lhci_reports/_-2024_07_23_10_23_54-report.json",
     "summary": {
       "performance": 0.61,
       "accessibility": 0.84,
@@ -14,8 +14,8 @@
   {
     "url": "http://localhost:5173/",
     "isRepresentativeRun": false,
-    "htmlPath": "/Users/choehyeon-u/Desktop/react-deep/packages/assignment-6/lhci_reports/_-2024_07_22_13_03_27-report.html",
-    "jsonPath": "/Users/choehyeon-u/Desktop/react-deep/packages/assignment-6/lhci_reports/_-2024_07_22_13_03_27-report.json",
+    "htmlPath": "/Users/hyunwoo/Desktop/react-deep/packages/assignment-6/lhci_reports/_-2024_07_23_10_24_15-report.html",
+    "jsonPath": "/Users/hyunwoo/Desktop/react-deep/packages/assignment-6/lhci_reports/_-2024_07_23_10_24_15-report.json",
     "summary": {
       "performance": 0.6,
       "accessibility": 0.84,
@@ -26,10 +26,10 @@
   {
     "url": "http://localhost:5173/",
     "isRepresentativeRun": true,
-    "htmlPath": "/Users/choehyeon-u/Desktop/react-deep/packages/assignment-6/lhci_reports/_-2024_07_22_13_03_39-report.html",
-    "jsonPath": "/Users/choehyeon-u/Desktop/react-deep/packages/assignment-6/lhci_reports/_-2024_07_22_13_03_39-report.json",
+    "htmlPath": "/Users/hyunwoo/Desktop/react-deep/packages/assignment-6/lhci_reports/_-2024_07_23_10_24_05-report.html",
+    "jsonPath": "/Users/hyunwoo/Desktop/react-deep/packages/assignment-6/lhci_reports/_-2024_07_23_10_24_05-report.json",
     "summary": {
-      "performance": 0.61,
+      "performance": 0.6,
       "accessibility": 0.84,
       "best-practices": 1,
       "seo": 0.82
