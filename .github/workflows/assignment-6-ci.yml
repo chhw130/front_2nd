@@ -43,7 +43,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: errorLog
+              body: `###tsc&build error ${errorLog}`
             })
 
   lint:
@@ -81,7 +81,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: errorLog
+              body: `###lint error ${errorLog}`
             })
 
   test:
@@ -115,7 +115,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: testLog
+              body: `###test log ${testLog}`
             })
 
   lighthouse:
