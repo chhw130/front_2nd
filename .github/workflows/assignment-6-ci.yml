@@ -102,7 +102,7 @@ jobs:
 
       - name: run test
         run: |
-          pnpm -F assignment-6 test:coverage true
+          pnpm -F assignment-6 test:coverage
 
       - name: Vitest Coverage Report
         uses: davelosert/vitest-coverage-report-action@v2.5.0
