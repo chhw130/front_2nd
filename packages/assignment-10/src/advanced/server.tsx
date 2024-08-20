@@ -1,15 +1,15 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import React from 'react';
-import express from 'express';
-import ReactDOMServer from 'react-dom/server';
-import { App } from './App.tsx';
+import React from "react";
+import express from "express";
+import ReactDOMServer from "react-dom/server";
+import { App } from "./App.tsx";
 
 const app = express();
 const port = 3333;
 
-app.get('*', (req, res) => {
-  const app = ReactDOMServer.renderToString(<App url={req.url}/>);
+app.get("*", (req, res) => {
+  const app = ReactDOMServer.renderToString(<App url={req.url} />);
 
   res.send(`
     <!DOCTYPE html>
