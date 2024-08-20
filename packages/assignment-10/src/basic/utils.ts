@@ -42,16 +42,20 @@ interface QueryType<T> {
  * @returns
  */
 export const getQuery = () => {
-  const cache = new Map(); // WeakMap 대신 일반 Map 사용
+  const cache = new Map<string, unknown>(); // WeakMap 대신 일반 Map 사용
 
-  return async <T>({ queryKey, queryFn }: QueryType<T>) => {
-    if (!cache.has(queryKey)) {
-      const response = await queryFn();
-      const data = await response.data;
-      cache.set(queryKey, data);
+  return async <T>({ queryKey, queryFn }: QueryType<T>): Promise<T> => {
+    console.log(`API 호출 ${queryKey}`, performance.now());
+
+    if (cache.has(queryKey)) {
+      return cache.get(queryKey) as T;
     }
 
-    return cache.get(queryKey);
+    const response = await queryFn();
+    const data = await response.data;
+    cache.set(queryKey, data);
+
+    return cache.get(queryKey) as T;
   };
 };
 
