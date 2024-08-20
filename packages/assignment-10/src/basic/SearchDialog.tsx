@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -31,7 +31,7 @@ import {
 } from "@chakra-ui/react";
 import { useScheduleContext } from "./ScheduleContext.tsx";
 import { Lecture } from "./types.ts";
-import { parseSchedule, getQuery } from "./utils.ts";
+import { parseSchedule, getQuery, getFilteredLectures } from "./utils.ts";
 import axios from "axios";
 import { DAY_LABELS } from "./constants.ts";
 
@@ -44,7 +44,7 @@ interface Props {
   onClose: () => void;
 }
 
-interface SearchOption {
+export interface SearchOption {
   query?: string;
   grades: number[];
   days: string[];
@@ -88,37 +88,12 @@ const fetchLiberalArts = () =>
 
 // TODO: 이 코드를 개선해서 API 호출을 최소화 해보세요 + Promise.all이 현재 잘못 사용되고 있습니다. 같이 개선해주세요.
 const fetchAllLectures = async () => {
-  const cache = getQuery();
-  const cachedFetchMajors = () =>
-    cache({ queryKey: ["major"], queryFn: fetchMajors });
-  // const cachedFetchLiberalArts = () => cache(fetchLiberalArts);
-  return await Promise.all([
-    // console.log(
-    //   "API Call 1",
-    //   performance.now(),
-    //   cache({ queryKey: ["major"], queryFn: fetchMajors })
-    // ),
-    // console.log(
-    //   "API Call 2",
-    //   performance.now(),
-    //   cache({ queryKey: ["liberalArts"], queryFn: fetchLiberalArts })
-    // ),
-    // console.log(
-    //   "API Call 3",
-    //   performance.now(),
-    //   cache({ queryKey: ["major"], queryFn: fetchMajors })
-    // ),
-    // cache({ queryKey: ["major"], queryFn: fetchMajors }),
-    // cache({ queryKey: ["major"], queryFn: fetchMajors }),
-    cachedFetchMajors(),
-    cachedFetchMajors(),
+  const cacheQuery = getQuery();
 
-    // (console.log("API Call 4", performance.now()),
-    // getQuery({ queryKey: ["liberalArts"], queryFn: fetchLiberalArts })()),
-    //   (console.log("API Call 3", performance.now()), fetchMajors()),
-    //   (console.log("API Call 4", performance.now()), fetchLiberalArts()),
-    //   (console.log("API Call 5", performance.now()), fetchMajors()),
-    //   (console.log("API Call 6", performance.now()), fetchLiberalArts()),
+  return await Promise.all([
+    await cacheQuery({ queryKey: "major", queryFn: fetchMajors }),
+    await cacheQuery({ queryKey: "major", queryFn: fetchMajors }),
+    await cacheQuery({ queryKey: "liberalArts", queryFn: fetchLiberalArts }),
   ]);
 };
 
@@ -138,49 +113,15 @@ const SearchDialog = ({ searchInfo, onClose }: Props) => {
     majors: [],
   });
 
-  const getFilteredLectures = () => {
-    const { query = "", credits, grades, days, times, majors } = searchOptions;
-    return lectures
-      .filter(
-        (lecture) =>
-          lecture.title.toLowerCase().includes(query.toLowerCase()) ||
-          lecture.id.toLowerCase().includes(query.toLowerCase())
-      )
-      .filter(
-        (lecture) => grades.length === 0 || grades.includes(lecture.grade)
-      )
-      .filter(
-        (lecture) => majors.length === 0 || majors.includes(lecture.major)
-      )
-      .filter(
-        (lecture) => !credits || lecture.credits.startsWith(String(credits))
-      )
-      .filter((lecture) => {
-        if (days.length === 0) {
-          return true;
-        }
-        const schedules = lecture.schedule
-          ? parseSchedule(lecture.schedule)
-          : [];
-        return schedules.some((s) => days.includes(s.day));
-      })
-      .filter((lecture) => {
-        if (times.length === 0) {
-          return true;
-        }
-        const schedules = lecture.schedule
-          ? parseSchedule(lecture.schedule)
-          : [];
-        return schedules.some((s) =>
-          s.range.some((time) => times.includes(time))
-        );
-      });
-  };
+  const memorizedFilteredLectures = useMemo(
+    () => getFilteredLectures(searchOptions, lectures),
+    [searchOptions, lectures]
+  );
 
-  const filteredLectures = getFilteredLectures();
+  const filteredLectures = memorizedFilteredLectures;
   const lastPage = Math.ceil(filteredLectures.length / PAGE_SIZE);
   const visibleLectures = filteredLectures.slice(0, page * PAGE_SIZE);
-  const allMajors = [...new Set(lectures.map((lecture) => lecture.major))];
+  const allMajors = [...new Set(lectures.map((lecture) => lecture?.major))];
 
   const changeSearchOption = (
     field: keyof SearchOption,
@@ -216,7 +157,8 @@ const SearchDialog = ({ searchInfo, onClose }: Props) => {
       const end = performance.now();
       console.log("모든 API 호출 완료 ", end);
       console.log("API 호출에 걸린 시간(ms): ", end - start);
-      setLectures(results.flatMap((result) => result.data));
+
+      setLectures(results.flatMap((result) => result));
     });
   }, []);
 
@@ -413,13 +355,15 @@ const SearchDialog = ({ searchInfo, onClose }: Props) => {
                     borderRadius={5}
                     p={2}
                   >
-                    {allMajors.map((major) => (
-                      <Box key={major}>
-                        <Checkbox key={major} size="sm" value={major}>
-                          {major.replace(/<p>/gi, " ")}
-                        </Checkbox>
-                      </Box>
-                    ))}
+                    {allMajors.map((major) => {
+                      return (
+                        <Box key={major}>
+                          <Checkbox key={major} size="sm" value={major}>
+                            {major?.replace(/<p>/gi, " ")}
+                          </Checkbox>
+                        </Box>
+                      );
+                    })}
                   </Stack>
                 </CheckboxGroup>
               </FormControl>
