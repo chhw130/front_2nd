@@ -57,6 +57,8 @@ export default function ScheduleDndProvider({ children }: PropsWithChildren) {
 
   /**
    * drag가 끝났을 때 발생하는 이벤트
+   * 여기서 scheduleContext에서의 상태를 변경하면,
+   * schedulesMap을 구독하는 컴포넌트는 모두 리렌더링함.(어떻게 해야할까..)
    */
   const handleDragEnd = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
