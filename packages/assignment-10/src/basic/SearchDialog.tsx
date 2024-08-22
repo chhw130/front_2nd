@@ -17,7 +17,11 @@ import {
 } from "@chakra-ui/react";
 import { useScheduleContext } from "./ScheduleContext.tsx";
 import { Lecture } from "./types.ts";
-import { parseSchedule, getQuery, getFilteredLectures } from "./utils.ts";
+import {
+  parseSchedule,
+  getFilteredLectures,
+  createCacheFetch,
+} from "./utils.ts";
 import axios from "axios";
 import LectureForm from "./components/Dialog/LectureForm.tsx";
 import LectureTable from "./components/Dialog/LectureTable.tsx";
@@ -48,15 +52,15 @@ const fetchLiberalArts = () =>
 
 // TODO: 이 코드를 개선해서 API 호출을 최소화 해보세요 + Promise.all이 현재 잘못 사용되고 있습니다. 같이 개선해주세요.
 const fetchAllLectures = async () => {
-  const cacheQuery = getQuery();
-
+  const memorizedFetchMajors = createCacheFetch(fetchMajors);
+  const memorizedFetchLiberalArts = createCacheFetch(fetchLiberalArts);
   return await Promise.all([
-    await cacheQuery<Lecture[]>({ queryKey: "major", queryFn: fetchMajors }),
-    // await cacheQuery<Lecture[]>({ queryKey: "major", queryFn: fetchMajors }),
-    await cacheQuery<Lecture[]>({
-      queryKey: "liberalArts",
-      queryFn: fetchLiberalArts,
-    }),
+    (console.log("API Call 1", performance.now()), memorizedFetchMajors()),
+    (console.log("API Call 2", performance.now()), memorizedFetchLiberalArts()),
+    (console.log("API Call 3", performance.now()), memorizedFetchMajors()),
+    (console.log("API Call 4", performance.now()), memorizedFetchLiberalArts()),
+    (console.log("API Call 5", performance.now()), memorizedFetchMajors()),
+    (console.log("API Call 6", performance.now()), memorizedFetchLiberalArts()),
   ]);
 };
 
@@ -143,7 +147,7 @@ const SearchDialog = ({ searchInfo, onClose }: Props) => {
       console.log("모든 API 호출 완료 ", end);
       console.log("API 호출에 걸린 시간(ms): ", end - start);
 
-      setLectures(results.flatMap((result) => result));
+      setLectures(results.flatMap((result) => result.data));
     });
   }, []);
 

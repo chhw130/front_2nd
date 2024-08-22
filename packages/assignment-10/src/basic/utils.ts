@@ -59,6 +59,19 @@ export const getQuery = () => {
   };
 };
 
+export const createCacheFetch = <T>(fetchFn: () => Promise<T>) => {
+  const cache = new WeakMap();
+  return async () => {
+    if (!cache.has(fetchFn)) {
+      const promise = fetchFn();
+      cache.set(fetchFn, promise);
+      return promise;
+    }
+
+    return cache.get(fetchFn)!;
+  };
+};
+
 /**
  * 검색옵션에 따라 필터링된 강의들을 얻는 함수
  * @param searchOptions
